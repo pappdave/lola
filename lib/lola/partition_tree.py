@@ -54,19 +54,24 @@ class PartitionTree:
         self._create_partition_tree(self.tree, topleft, bottomright, depth)
 
     @staticmethod
+    def _get_subtree_index(tree, element, depth):
+        index = 1 - PartitionTree._get_axis(depth)
+        current_pivot = tree.keys()[0]
+        if element[index] <= current_pivot[index]:
+            return 0
+        else:
+            return 1
+
+    @staticmethod
     def _insert(tree, element, depth):
         """ Insert element into the given tree assuming the specified depth """
 
         if depth <= 0:
             tree.append(element)
         else:
-            index = 1 - PartitionTree._get_axis(depth)
+            index = PartitionTree._get_subtree_index(tree, element, depth)
             current_pivot = tree.keys()[0]
-            if element[index] <= current_pivot[index]:
-                subtree = tree[current_pivot][0]
-            else:
-                subtree = tree[current_pivot][1]
-
+            subtree = tree[current_pivot][index]
             PartitionTree._insert(subtree, element, depth - 1)
 
 
@@ -88,14 +93,10 @@ class PartitionTree:
                 return None
 
         else:
-            index = 1 - PartitionTree._get_axis(depth)
+            index = PartitionTree._get_subtree_index(tree, element, depth)
             current_pivot = tree.keys()[0]
-            if element[index] <= current_pivot[index]:
-                subtree = tree[current_pivot][0]
-                other_subtree = tree[current_pivot][1]
-            else:
-                subtree = tree[current_pivot][1]
-                other_subtree = tree[current_pivot][0]
+            subtree = tree[current_pivot][index]
+            other_subtree = tree[current_pivot][1 - index]
 
             closest = PartitionTree._get_closest_to(subtree, element, depth - 1)
             if closest is not None:
@@ -123,13 +124,9 @@ class PartitionTree:
         if depth <= 0:
             tree.remove(element)
         else:
-            index = 1 - PartitionTree._get_axis(depth)
+            index = PartitionTree._get_subtree_index(tree, element, depth)
             current_pivot = tree.keys()[0]
-            if element[index] <= current_pivot[index]:
-                subtree = tree[current_pivot][0]
-            else:
-                subtree = tree[current_pivot][1]
-
+            subtree = tree[current_pivot][index]
             PartitionTree._remove(subtree, element, depth - 1)
 
     def remove(self, element):
