@@ -1,5 +1,6 @@
 
 import math
+import lola.util
 
 class PartitionTree:
     """ A class representing a tree used for partitioning a 2d space """
@@ -69,34 +70,11 @@ class PartitionTree:
         self._insert(self.tree[0], element, self.depth)
 
     @staticmethod
-    def _get_distance(coord1, coord2):
-        """ Given two tuples representing Cartesian coordinates, return the
-        Euclidean distance """
-
-        diff_x = coord1[0] - coord2[0]
-        diff_y = coord1[1] - coord2[1]
-        return math.sqrt(diff_x * diff_x + diff_y * diff_y)
-
-    @staticmethod
-    def _get_closest_coord_index(current_coord, coords):
-        """ Return the index of the coordinate in the coords list which is the
-        closest to current_coord """
-
-        min_index = 0
-        min_distance = PartitionTree._get_distance(current_coord, coords[0])
-        for i in range(1, len(coords)):
-            current_distance = PartitionTree._get_distance(current_coord, coords[i])
-            if current_distance < min_distance:
-                min_index = i
-                min_distance = current_distance
-
-        return coords[min_index]
-
-    @staticmethod
     def _get_closest_to(tree, element, depth):
         if depth <= 0:
             if len(tree) > 0:
-                return PartitionTree._get_closest_coord_index(element, tree)
+                index = lola.util.get_closest_coord_index(element, tree)
+                return tree[index]
             else:
                 return None
 
@@ -112,13 +90,13 @@ class PartitionTree:
 
             closest = PartitionTree._get_closest_to(subtree, element, depth - 1)
             if closest is not None:
-                closest_distance = PartitionTree._get_distance(element, closest)
+                closest_distance = lola.util.get_distance(element, closest)
             if closest is None or closest_distance > abs(current_pivot[index] - element[index]):
                 closest2 = PartitionTree._get_closest_to(other_subtree, element, depth - 1)
                 if closest is None:
                     closest = closest2
                 elif closest2 is not None:
-                    closest2_distance = PartitionTree._get_distance(element, closest2)
+                    closest2_distance = lola.util.get_distance(element, closest2)
                     if closest2_distance < closest_distance:
                         closest = closest2
 
