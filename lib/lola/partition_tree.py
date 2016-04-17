@@ -41,6 +41,8 @@ class PartitionTree:
 
     @staticmethod
     def _get_axis(depth):
+        """ Return the axis used for partitioning at the given depth """
+
         return depth % 2
 
     def __init__(self, topleft, bottomright, depth=10):
@@ -53,6 +55,8 @@ class PartitionTree:
 
     @staticmethod
     def _insert(tree, element, depth):
+        """ Insert element into the given tree assuming the specified depth """
+
         if depth <= 0:
             tree.append(element)
         else:
@@ -67,10 +71,15 @@ class PartitionTree:
 
 
     def insert(self, element):
+        """ Insert the given element to the partition tree """
+
         self._insert(self.tree[0], element, self.depth)
 
     @staticmethod
     def _get_closest_to(tree, element, depth):
+        """ Return the value in the given tree (assuming the specified depth)
+        which is closest the element """
+
         if depth <= 0:
             if len(tree) > 0:
                 index = lola.util.get_closest_coord_index(element, tree)
@@ -103,10 +112,14 @@ class PartitionTree:
             return closest
  
     def get_closest_to(self, element):
+        """ Return the value in the tree which is closest to element """
+
         return self._get_closest_to(self.tree[0], element, self.depth)
 
     @staticmethod
     def _remove(tree, element, depth):
+        """ Remove element from the given tree assuming the specified depth """
+
         if depth <= 0:
             tree.remove(element)
         else:
@@ -120,5 +133,7 @@ class PartitionTree:
             PartitionTree._remove(subtree, element, depth - 1)
 
     def remove(self, element):
+        """ Remove element from the partition tree """
+
         return self._remove(self.tree[0], element, self.depth)
 
