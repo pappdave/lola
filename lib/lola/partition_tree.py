@@ -98,10 +98,11 @@ class PartitionTree:
             subtree = tree[current_pivot][index]
             other_subtree = tree[current_pivot][1 - index]
 
+            axis = PartitionTree._get_axis(depth)
             closest = PartitionTree._get_closest_to(subtree, element, depth - 1)
             if closest is not None:
                 closest_distance = lola.util.get_distance(element, closest)
-            if closest is None or closest_distance > abs(current_pivot[index] - element[index]):
+            if closest is None or closest_distance > abs(current_pivot[1 - axis] - element[1 - axis]):
                 closest2 = PartitionTree._get_closest_to(other_subtree, element, depth - 1)
                 if closest is None:
                     closest = closest2
